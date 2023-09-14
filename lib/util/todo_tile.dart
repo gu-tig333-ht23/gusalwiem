@@ -1,17 +1,14 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/todothing_item.dart';
 
 class ToDoTile extends StatelessWidget {
-  final String taskName;
-  final bool taskCompleted;
-  Function(bool?)? onChanged;
+  final Task task;
 
-  ToDoTile({
+  const ToDoTile({
     super.key,
-    required this.taskName,
-    required this.taskCompleted,
-    required this.onChanged,
+    required this.task,
   });
 
   @override
@@ -27,26 +24,45 @@ class ToDoTile extends StatelessWidget {
         child: Row(
           children: [
             //checkbox
-            Checkbox(
-              value: taskCompleted,
-              onChanged: onChanged,
-              activeColor: Colors.white,
-              checkColor: Colors.blue,
+            GestureDetector(
+              onTap: () {
+                context.read<ToDoThing>().checkBoxChanged(task);
+              },
+              child: !task.boxCheck // if statement för checkbox
+                  ? const Icon(
+                      Icons.check_box_outline_blank,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.check_box,
+                      color: Colors.white,
+                    ),
             ),
-
             // task name
             Expanded(
-              child: Text(
-                taskName,
-                style: TextStyle(
-                  decoration: taskCompleted
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  task.tName,
+                  style: TextStyle(
+                    decoration: task.boxCheck
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
                 ),
               ),
             ),
+
             //delete task
-            IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+            IconButton(
+              onPressed: () {
+                context.read<ToDoThing>().deleteTask(task);
+              },
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+            )
           ],
         ),
       ),
