@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import '/provider/todothing_item.dart';
+import 'pages/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  ToDoThing state = ToDoThing();
+  runApp(ChangeNotifierProvider(
+    create: (context) => state,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,13 +18,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
             color: Colors.white,
-            fontFamily: "Font 2",
+            fontFamily: 'Raleway',
             fontSize: 18,
             fontWeight: FontWeight.bold,
             fontStyle: FontStyle.normal,
