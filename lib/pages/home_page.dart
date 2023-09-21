@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '/util/api.dart';
 import '/pages/addtask_page.dart';
 import '/util/filter.dart';
 import '/util/viewlist.dart';
@@ -23,18 +24,19 @@ class HomePage extends StatelessWidget {
           ),
           elevation: 0,
           actions: [
-            //filter knapp
+            //FILTER BUTTON
             IconButton(
                 onPressed: () {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return MyFilter();
+                        return const MyFilter();
                       });
                 },
                 icon: const Icon(Icons.more_vert, color: Colors.white))
           ]),
-      //gå till sida för att lägga till en ny task
+
+      //GO TO ADD NEW TASK PAGE
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
@@ -49,8 +51,23 @@ class HomePage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      //visa listan i homepage
-      body: const ViewMyList(),
+
+      //SHOW LIST IN HOMEPAGE
+      body: FutureBuilder(
+        future: API.getList(),
+        builder: ((context, snapshot) {
+          //SHOW DATA
+          if (snapshot.connectionState == ConnectionState.done) {
+            return const ViewMyList();
+          }
+          //LOADING SCREEN
+          else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }),
+      ),
     );
   }
 }
