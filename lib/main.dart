@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/pages/home_page.dart';
 import '/provider/todothing_item.dart';
-import 'pages/home_page.dart';
 
 void main() {
   ToDoThing state = ToDoThing();
+  state.fetchList();
+
   runApp(ChangeNotifierProvider(
     create: (context) => state,
     child: const MyApp(),

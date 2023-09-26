@@ -1,42 +1,61 @@
 import 'package:flutter/material.dart';
+import '/util/api.dart';
 
 class Task {
-  String tName;
+  final String tName;
   bool boxCheck;
+  final String? id;
 
-  Task({
-    required this.tName,
-    required this.boxCheck,
+  Task(
+    this.tName, {
+    this.boxCheck = false,
+    this.id,
   });
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(json['title'], boxCheck: json['done'], id: json['id']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"title": tName, 'done': boxCheck};
+  }
 }
 
 class ToDoThing extends ChangeNotifier {
-//vår lista
-// ignore: prefer_final_fields
-  List<Task> _toDoList = [
-    Task(tName: 'fixa filterjäveln', boxCheck: false),
-  ];
+//OUR LIST
+  List<Task> _toDoList = [];
 
-//change checkbox
-  void checkBoxChanged(task) {
-    task.boxCheck = !task.boxCheck;
-    //_toDoList[index][1] = !_toDoList[index][1];
+//GET LIST FROM API
+  void fetchList() async {
+    var toDoList = await API.getList();
+    _toDoList = toDoList;
     notifyListeners();
   }
 
-//save task
-  void saveNewTask(String eText) {
-    _toDoList.add(Task(tName: eText, boxCheck: false));
-    notifyListeners();
+  API apiMethods = API();
+
+//CHANGE CHECKBOX
+  void checkBoxChanged(task) async {
+    Task onChange = task;
+    onChange.boxCheck = !onChange.boxCheck;
+    await apiMethods.updateTask(task);
+    fetchList();
   }
 
-//delete task
-  void deleteTask(task) {
-    _toDoList.remove(task);
-    notifyListeners();
+//SAVE TASK
+  void saveNewTask(task) async {
+    Task newTask = Task(task);
+    await apiMethods.addTask(newTask);
+    fetchList();
   }
 
-//filter
+//DELETE TASK
+  void deleteTask(task) async {
+    await apiMethods.removeTask(task);
+    fetchList();
+  }
+
+//FILTER
   String selectedFilter = '';
 
   String setFilter(String filt) {

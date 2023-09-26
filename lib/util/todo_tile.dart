@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/todothing_item.dart';
 
 class ToDoTile extends StatelessWidget {
@@ -23,12 +22,12 @@ class ToDoTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            //checkbox
+            //CHECKBOX
             GestureDetector(
               onTap: () {
                 context.read<ToDoThing>().checkBoxChanged(task);
               },
-              child: !task.boxCheck // if statement för checkbox
+              child: !task.boxCheck // CHECKBOX DESIGN
                   ? const Icon(
                       Icons.check_box_outline_blank,
                       color: Colors.white,
@@ -38,13 +37,14 @@ class ToDoTile extends StatelessWidget {
                       color: Colors.white,
                     ),
             ),
-            // task name
+            // TASK NAME
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   task.tName,
                   style: TextStyle(
+                    color: task.boxCheck ? Colors.blue : Colors.white,
                     decoration: task.boxCheck
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
@@ -53,7 +53,7 @@ class ToDoTile extends StatelessWidget {
               ),
             ),
 
-            //delete task
+            //DELETE BUTTON
             IconButton(
               onPressed: () {
                 context.read<ToDoThing>().deleteTask(task);

@@ -11,7 +11,6 @@ class MyButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    //required String value,
   });
 
   @override
@@ -19,11 +18,13 @@ class MyButton extends StatelessWidget {
     return MaterialButton(
       onPressed: onPressed,
       color: Colors.blue[300],
+      minWidth: 100,
       child: Text(
         text,
         style: const TextStyle(
           fontSize: 16,
           color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

@@ -11,13 +11,27 @@ class AddTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //MESSAGE FOR ADD BUTTON
+    void snackis(String text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.blue,
+          content: Text(
+            text,
+            style: const TextStyle(fontSize: 16),
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
     return Scaffold(
         backgroundColor: Colors.blue[100],
-        //AppBar
+        //APPBAR
         appBar: AppBar(
-          //return button white
+          //RETURN BUTTON WHITE
           iconTheme: IconThemeData(color: Colors.white),
-          //designAppBar
+          //DESIGN OF APPBAR
           systemOverlayStyle: SystemUiOverlayStyle.light,
           title: const Text(
             "ADD NEW TASK",
@@ -28,6 +42,8 @@ class AddTask extends StatelessWidget {
             ),
           ),
         ),
+
+        //BODY
         body: Padding(
           padding: const EdgeInsets.only(
             left: 25.0,
@@ -36,7 +52,7 @@ class AddTask extends StatelessWidget {
             bottom: 500,
           ),
 
-          // White box
+          // WHITE BOX
           child: Container(
             padding: const EdgeInsets.all(24.0),
             decoration: BoxDecoration(
@@ -44,7 +60,7 @@ class AddTask extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
 
-            // Input
+            // INPUT FIELD
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -53,10 +69,11 @@ class AddTask extends StatelessWidget {
                   controller: _controller,
                   decoration: const InputDecoration(
                     hintText: 'What are you going to do?',
+                    icon: Icon(Icons.check),
                   ),
                 ),
 
-                // Add button
+                // ADD BUTTON
                 Consumer(
                   builder: (context, value, child) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -64,10 +81,15 @@ class AddTask extends StatelessWidget {
                         text: "ADD TASK",
                         onPressed: () {
                           String enteredText = _controller.text;
-                          Provider.of<ToDoThing>(context, listen: false)
-                              .saveNewTask(enteredText);
-                          _controller.clear();
-                          Navigator.of(context).pop();
+                          if (enteredText == '') {
+                            snackis('Textfield empty! Please enter som text.');
+                          } else {
+                            Provider.of<ToDoThing>(context, listen: false)
+                                .saveNewTask(enteredText);
+                            _controller.clear();
+                            snackis('Task added!');
+                            Navigator.of(context).pop();
+                          }
                         }),
                   ),
                 )
